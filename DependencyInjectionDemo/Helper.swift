@@ -7,22 +7,55 @@
 
 import Foundation
 
-class JSONNull: NSSecureCoding {
+//class JSONNull: NSSecureCoding {
+//
+//    public static func == (lhs: JSONNull, rhs: JSONNull) -> Bool {
+//        return true
+//    }
+//
+//    static var supportsSecureCoding: Bool {
+//        return true
+//    }
+//
+//    func encode(with coder: NSCoder) {
+//        coder.encode(NSNull(), forKey: "JSONNullKey")
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        coder.decodeObject(forKey: "JSONNullKey")
+//    }
+//}
 
-    public static func == (lhs: JSONNull, rhs: JSONNull) -> Bool {
-        return true
-    }
+class JSONNull: Codable, NSSecureCoding {
 
-    static var supportsSecureCoding: Bool {
-        return true
+    static var supportsSecureCoding: Bool = true
+
+    required init?(coder: NSCoder) {
+        //empty initializer required
     }
 
     func encode(with coder: NSCoder) {
-        coder.encode(NSNull(), forKey: "JSONNullKey")
+        //empty encoder required
     }
-
-    required init?(coder: NSCoder) {
-        coder.decodeObject(forKey: "JSONNullKey")
+    
+    public static func == (lhs: JSONNull, rhs: JSONNull) -> Bool {
+        return true
+    }
+    
+    public init() {
+        //not implemented
+    }
+    
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if !container.decodeNil() {
+            throw DecodingError.typeMismatch(JSONNull.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for JSONNull"))
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encodeNil()
     }
 }
 

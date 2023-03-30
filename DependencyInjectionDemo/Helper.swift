@@ -22,7 +22,7 @@ class JSONNull: NSSecureCoding {
     }
 
     required init?(coder: NSCoder) {
-        coder.decodeObject(of: [NSNull.self], forKey: "JSONNullKey") != nil        
+        coder.decodeObject(forKey: "JSONNullKey")
     }
 }
 

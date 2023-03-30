@@ -277,7 +277,7 @@ class JSONAny: Codable, NSSecureCoding {
     static var supportsSecureCoding: Bool = true
     
     required init?(coder: NSCoder) {
-        self.value = coder.decodeObject(of: [NSArray.classForCoder()], forKey: JSONCodingKey.init(stringValue: ""))
+        self.value = coder.decodeObject(of: [NSArray.classForCoder()], forKey: "")
         //empty initializer required
     }
     

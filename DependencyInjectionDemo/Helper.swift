@@ -277,7 +277,12 @@ class JSONAny: Codable, NSSecureCoding {
     static var supportsSecureCoding: Bool = true
     
     required init?(coder: NSCoder) {
-        self.value = coder.decodeObject(of: [NSArray.classForCoder(), NSDictionary.classForCoder(), NSString.classForCoder(), NSNull.classForCoder()], forKey: "JSONKey")
+        guard
+            let data = coder.decodeObject(of: [NSString.classForCoder(), NSDictionary.classForCoder(), NSArray.classForCoder(), NSNull.classForCoder()], forKey: "JSONKey")
+        else {
+            return nil
+        }
+        self.value = data
     }
     
     func encode(with coder: NSCoder) {

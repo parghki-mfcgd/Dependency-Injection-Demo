@@ -277,7 +277,7 @@ class JSONAny: Codable, NSSecureCoding {
     static var supportsSecureCoding: Bool = true
     
     required init?(coder: NSCoder) {
-        self.value = coder.decodeObject(of: [NSArray.classForCoder()], forKey: "")
+        self.value = coder.decodeObject(of: [NSArray.classForCoder(), NSDictionary.classForCoder(), NSString.classForCoder(), NSNull.classForCoder()], forKey: "")
         //empty initializer required
     }
     

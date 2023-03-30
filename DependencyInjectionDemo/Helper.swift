@@ -7,32 +7,24 @@
 
 import Foundation
 
-//class JSONNull: NSObject, NSSecureCoding {
-//
-//    public static func == (lhs: JSONNull, rhs: JSONNull) -> Bool {
-//        return true
-//    }
-//
-//    public override init() {
-//        super.init()
-//    }
-//
-//    static var supportsSecureCoding: Bool {
-//        return true
-//    }
-//
-//    func encode(with coder: NSCoder) {
-//        coder.encode(NSNull(), forKey: "JSONNullKey")
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        guard
-//            (coder.decodeObject(of: [NSNull.classForCoder()], forKey: "JSONNullKey") != nil)
-//        else {
-//            return nil
-//        }
-//    }
-//}
+class JSONNull: NSSecureCoding {
+
+    public static func == (lhs: JSONNull, rhs: JSONNull) -> Bool {
+        return true
+    }
+
+    static var supportsSecureCoding: Bool {
+        return true
+    }
+
+    func encode(with coder: NSCoder) {
+        coder.encode(NSNull(), forKey: "JSONNullKey")
+    }
+
+    required init?(coder: NSCoder) {
+        coder.decodeObject(of: [NSNull.self], forKey: "JSONNullKey") != nil        
+    }
+}
 
 class JSONCodingKey: CodingKey {
     let key: String
@@ -82,7 +74,7 @@ class JSONAny: NSObject, Codable, NSSecureCoding {
             return value
         }
         if container.decodeNil() {
-            return NSNull()
+            return JSONNull()
         }
         throw decodingError(forCodingPath: container.codingPath)
     }
@@ -102,7 +94,7 @@ class JSONAny: NSObject, Codable, NSSecureCoding {
         }
         if let value = try? container.decodeNil() {
             if value {
-                return NSNull()
+                return JSONNull()
             }
         }
         if var container = try? container.nestedUnkeyedContainer() {
@@ -129,7 +121,7 @@ class JSONAny: NSObject, Codable, NSSecureCoding {
         }
         if let value = try? container.decodeNil(forKey: key) {
             if value {
-                return NSNull()
+                return JSONNull()
             }
         }
         if var container = try? container.nestedUnkeyedContainer(forKey: key) {
@@ -169,7 +161,7 @@ class JSONAny: NSObject, Codable, NSSecureCoding {
                 try container.encode(value)
             } else if let value = value as? String {
                 try container.encode(value)
-            } else if value is NSNull {
+            } else if value is JSONNull {
                 try container.encodeNil()
             } else if let value = value as? [Any] {
                 var container = container.nestedUnkeyedContainer()
@@ -194,7 +186,7 @@ class JSONAny: NSObject, Codable, NSSecureCoding {
                 try container.encode(value, forKey: key)
             } else if let value = value as? String {
                 try container.encode(value, forKey: key)
-            } else if value is NSNull {
+            } else if value is JSONNull {
                 try container.encodeNil(forKey: key)
             } else if let value = value as? [Any] {
                 var container = container.nestedUnkeyedContainer(forKey: key)
@@ -217,7 +209,7 @@ class JSONAny: NSObject, Codable, NSSecureCoding {
             try container.encode(value)
         } else if let value = value as? String {
             try container.encode(value)
-        } else if value is NSNull {
+        } else if value is JSONNull {
             try container.encodeNil()
         } else {
             throw encodingError(forValue: value, codingPath: container.codingPath)
@@ -255,7 +247,7 @@ class JSONAny: NSObject, Codable, NSSecureCoding {
     
     required init?(coder: NSCoder) {
         guard
-            let data = coder.decodeObject(of: [NSString.classForCoder(), NSDictionary.classForCoder(), NSArray.classForCoder(), NSNull.classForCoder()], forKey: "JSONKey")
+            let data = coder.decodeObject(of: [NSString.classForCoder(), NSDictionary.classForCoder(), NSArray.classForCoder(), JSONNull.classForCoder()], forKey: "JSONKey")
         else {
             return nil
         }

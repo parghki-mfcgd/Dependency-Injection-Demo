@@ -28,9 +28,7 @@ import Foundation
 
 class JSONNull: Codable, NSSecureCoding {
 
-    static var supportsSecureCoding: Bool {
-        return true
-    }
+    static var supportsSecureCoding: Bool = true
 
     required init?(coder: NSCoder) {
         //empty initializer required
@@ -276,9 +274,7 @@ class JSONAny: Codable, NSSecureCoding {
     }
     
     //Implemention of NSSecureCoding Protocol by setting supportsSecureCoding to true and provide implementation for encode(with coder:NSCoder) and init?(coder:NSCoder) methods
-    static var supportsSecureCoding: Bool {
-            return true
-    }
+    static var supportsSecureCoding: Bool = true
     
     required init?(coder: NSCoder) {
         guard

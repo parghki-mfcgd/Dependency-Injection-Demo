@@ -79,7 +79,7 @@ class JSONCodingKey: CodingKey {
     }
 }
 
-class JSONAny: NSObject, Codable, NSSecureCoding {
+class JSONAny: Codable, NSSecureCoding {
     
     var value : Any
     
@@ -274,13 +274,12 @@ class JSONAny: NSObject, Codable, NSSecureCoding {
     }
         
     //Implemention of NSSecureCoding Protocol by setting supportsSecureCoding to true and provide implementation for encode(with coder:NSCoder) and init?(coder:NSCoder) methods
-    static var supportsSecureCoding: Bool {
-        return true
-    }
     
+    static var supportsSecureCoding: Bool = true
+       
     required init?(coder: NSCoder) {
         guard
-            let data = coder.decodeObject(of: [NSString.classForCoder(), NSDictionary.classForCoder(), NSArray.classForCoder(), JSONNull.classForCoder()], forKey: "JSONKey")
+            let data = coder.decodeObject(of: [NSString.classForCoder(), NSDictionary.classForCoder(), NSArray.classForCoder()], forKey: "JSONKey")
         else {
             return nil
         }
